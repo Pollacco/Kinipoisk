@@ -27,19 +27,31 @@ function apiSearch(event) {
     output.results.forEach((item) => {
       let nameItem = item.name || item.title;
       const posterMain = item.poster_path ? poster + item.poster_path : './images/miss.jpg';
+      let dataInfo = '';
+      if (item.media_type !== 'person') dataInfo = `data-id="${item.id}" data-type="${item.media_type}"`;
       inner += `
       <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 item">
-      <img src="${posterMain}" class="imgposter" alt="${nameItem}">
+      <img src="${posterMain}" class="imgposter" alt="${nameItem}" ${dataInfo}>
         <h5>${nameItem}</h5>       
       </div>
       `;
     });
     movie.innerHTML = inner; 
+
+    const media = movie.querySelectorAll('.item');
+    media.forEach(function(elem) {
+      elem.addEventListener('click',renderInfo);
+    })
+
   })
   .catch(function() {
     movie.innerHTML = 'Произошла ошибка, повторите Ваш запрос'; 
-    console.log('error' + reason.status);
+    console.log(reason || reason.status);
   });
 }
 
 searchForm.addEventListener('submit', apiSearch);
+
+function renderInfo() {
+  console.log(this);
+}
